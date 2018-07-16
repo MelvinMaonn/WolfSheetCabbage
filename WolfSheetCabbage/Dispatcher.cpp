@@ -64,12 +64,9 @@ void Dispatcher::queryPrograms()
 		
 	}
 	string* programs = new string[num];
-	//programs[0] = "M";
 	for (int i = 0; i < temp.length(); i++)
 	{
-		//programs[i + 1] = "M" + temp.at(i);
-		string q = temp.substr(i,1);
-		programStack.push(q+"M");
+		programStack.push(temp.substr(i, 1) + "M");
 		programPos.push(rightState.size());
 		menPlaceStack.push(menPlace);
 	}
@@ -129,8 +126,7 @@ void Dispatcher::scheduling(string program)
 		menPlace = 0;
 		for (int i = 0; i < program.length(); i++)
 		{
-			int pos = right.find(program.substr(i,1));
-			right = right.erase(pos,1);
+			right = right.erase(right.find(program.substr(i, 1)),1);
 			left = left.append(program.substr(i,1) + "");
 		}
 	}
@@ -139,11 +135,7 @@ void Dispatcher::scheduling(string program)
 
 bool Dispatcher::isDone()
 {
-	if (programStack.empty())
-	{
-		return true;
-	}
-	return false;
+	return programStack.empty();
 }
 
 string Dispatcher::getProgram()
@@ -176,42 +168,16 @@ void Dispatcher::restoreState()
 	{
 		return;
 	}
-	//leftState.(leftState.begin() + programPos.top(), leftState.end());
+
 	for (int i = rightState.size()-1; i >= programPos.top(); i--)
 	{
 		leftState.pop_back();
 		rightState.pop_back();
 	}
+
 	left = leftState.back();
 	right = rightState.back();
-
 	menPlace = menPlaceStack.top();
 }
-
-/*void Dispatcher::restoreLastState(string program)
-{
-	if (menPlace == 0)
-	{
-		menPlace = 1;
-		for (int i = 0; i < program.length(); i++)
-		{
-
-			left = left.erase(left.find(program.substr(i, 1)), 1);
-			right = right.append(program.substr(i, 1) + "");
-		}
-	}
-	else
-	{
-		menPlace = 0;
-		for (int i = 0; i < program.length(); i++)
-		{
-			int pos = right.find(program.substr(i, 1));
-			right = right.erase(pos, 1);
-			left = left.append(program.substr(i, 1) + "");
-		}
-	}
-	rightState.pop_back();
-	
-}*/
 
 
